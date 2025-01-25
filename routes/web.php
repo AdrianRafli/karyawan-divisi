@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\EmployeeController;
+use App\Models\Employee;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,7 +28,7 @@ Route::get('/', function () {
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [EmployeeController::class, 'index'])->name('dashboard');
 
-    Route::resource('employees', EmployeeController::class);
+    Route::resource('employees', EmployeeController::class)->except(['show']);
 
     Route::get('/employees/create', [EmployeeController::class, 'create'])->name('employees.create');
     Route::post('/employees', [EmployeeController::class, 'store'])->name('employees.store');
@@ -35,5 +36,43 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/employees/{employee}', [EmployeeController::class, 'update'])->name('employees.update');
     Route::delete('/employees/{employee}', [EmployeeController::class, 'destroy'])->name('employees.destroy');
 });
+
+// saya melakukan export excel/csv secara manual karena tidak bisa menggunakan library Maatwebsite\Excel
+Route::get('/employees/export', function () {
+    // Set nama file
+    $fileName = 'employees.csv';
+
+    // Ambil data karyawan beserta relasi divisi
+    $employees = Employee::with('division')->get();
+
+    // Header untuk file CSV
+    $headers = [
+        'Content-Type' => 'text/csv',
+        'Content-Disposition' => "attachment; filename=\"$fileName\"",
+    ];
+
+    // Callback untuk menulis data ke file CSV
+    $callback = function () use ($employees) {
+        $file = fopen('php://output', 'w');
+
+        // Tulis header kolom di CSV
+        fputcsv($file, ['ID', 'Nama', 'Email', 'Telepon', 'Divisi']);
+
+        // Tulis data karyawan ke CSV
+        foreach ($employees as $employee) {
+            fputcsv($file, [
+                $employee->id,
+                $employee->name,
+                $employee->email,
+                $employee->phone,
+                $employee->division ? $employee->division->name : 'Tidak Ada',
+            ]);
+        }
+
+        fclose($file);
+    };
+
+    return response()->stream($callback, 200, $headers);
+})->name('employees.export');
 
 require __DIR__.'/auth.php';

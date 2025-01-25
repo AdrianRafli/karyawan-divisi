@@ -2,10 +2,12 @@
 
 @section('content')
 <div class="container mt-4">
-    <div class="d-flex justify-content-between mb-3">
-        <h2>Dashboard</h2>
+    <h1 class="fs-1 fw-bold mb-3">Dashboard</h1>
+    <div class="d-flex justify-content-between align-items-center mb-4">
         <a href="{{ route('employees.create') }}" class="btn btn-primary">Tambah Karyawan</a>
+        <a href="{{ route('employees.export') }}" class="btn btn-success">Download Excel</a>
     </div>
+    
 
     @if (session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
