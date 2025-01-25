@@ -2,13 +2,13 @@
 
 @section('content')
 <div class="container mt-4">
-    <h1 class="fs-1 fw-bold mb-3">Dashboard</h1>
+    <h2 class="fs-1 fw-bold mb-3">Dashboard</h2>
     <div class="d-flex justify-content-between align-items-center mb-4">
+        <a href="{{ route('employees.create') }}" class="btn btn-primary">Tambah Karyawan</a>
         <div>
-            <a href="{{ route('employees.create') }}" class="btn btn-primary">Tambah Karyawan</a>
             <a href="{{ route('employees.export-pdf') }}" class="btn btn-danger">Cetak PDF</a>
+            <a href="{{ route('employees.export') }}" class="btn btn-success">Download Excel</a>
         </div>
-        <a href="{{ route('employees.export') }}" class="btn btn-success">Download Excel</a>
     </div>
     
 

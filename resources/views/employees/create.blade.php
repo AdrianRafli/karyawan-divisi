@@ -2,26 +2,38 @@
 
 @section('content')
 <div class="container mt-4">
-    <h2>Tambah Karyawan</h2>
+    <h2 class="fs-1 fw-bold mb-3">Tambah Karyawan</h2>
     <form action="{{ route('employees.store') }}" method="POST">
         @csrf
         <div class="mb-3">
             <label for="name" class="form-label">Nama</label>
-            <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name') }}">
+            <input 
+                type="text" 
+                name="name" 
+                class="form-control @error('name') is-invalid @enderror" 
+                value="{{ old('name') }}">
             @error('name')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
         </div>
         <div class="mb-3">
             <label for="email" class="form-label">Email</label>
-            <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email') }}">
+            <input 
+                type="email" 
+                name="email" 
+                class="form-control @error('email') is-invalid @enderror" 
+                value="{{ old('email') }}">
             @error('email')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
         </div>
         <div class="mb-3">
             <label for="phone" class="form-label">Telepon</label>
-            <input type="text" name="phone" class="form-control @error('phone') is-invalid @enderror" value="{{ old('phone') }}">
+            <input 
+                type="text" 
+                name="phone" 
+                class="form-control @error('phone') is-invalid @enderror" 
+                value="{{ old('phone') }}">
             @error('phone')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
