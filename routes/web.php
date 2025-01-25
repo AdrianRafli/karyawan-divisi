@@ -3,6 +3,7 @@
 use App\Http\Controllers\EmployeeController;
 use App\Models\Employee;
 use Illuminate\Support\Facades\Route;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 /*
 |--------------------------------------------------------------------------
@@ -74,5 +75,18 @@ Route::get('/employees/export', function () {
 
     return response()->stream($callback, 200, $headers);
 })->name('employees.export');
+
+// cetak pdf
+Route::get('/employees/export-pdf', function () {
+    // Ambil data karyawan beserta relasi divisi
+    $employees = \App\Models\Employee::with('division')->get();
+
+    // Generate PDF
+    $pdf = Pdf::loadView('employees.pdf', compact('employees'))->setPaper('a4', 'landscape');
+
+    // Unduh file PDF
+    return $pdf->download('employees.pdf');
+})->name('employees.export-pdf');
+
 
 require __DIR__.'/auth.php';
